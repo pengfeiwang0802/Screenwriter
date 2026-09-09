@@ -38,6 +38,14 @@ else
   echo "   ⚠️  AppIcon.icns not found, skipping icon"
 fi
 
+# 复制能力/接口文档（AGENT.md）进 app —— 供运行时的超级 AI 助手读取，学会如何与编剧助手交互
+if [ -f "$PROJECT_DIR/AGENT.md" ]; then
+  cp "$PROJECT_DIR/AGENT.md" "$STAGE_DIR/Contents/Resources/AGENT.md"
+  echo "   ✅ Copied AGENT.md to Resources (for AI assistants)"
+else
+  echo "   ⚠️  AGENT.md not found, skipping capability doc"
+fi
+
 # 设置版本号
 if [ -n "$1" ]; then
   VERSION="$1"
