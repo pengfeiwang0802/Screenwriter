@@ -20,6 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.makeKeyAndOrderFront(nil)
 
         NSApp.setActivationPolicy(.regular)
+        // 从 Xcode/SPM 直接运行时 app 不会自动激活到前台，需显式激活，否则窗口不置前
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     /// 处理双击 .swsproj/.sws 文件打开（app 未运行时，此回调在 didFinishLaunching 之前触发）
