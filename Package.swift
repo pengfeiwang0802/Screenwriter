@@ -6,6 +6,12 @@ let package = Package(
     platforms: [
         .macOS(.v14)
     ],
+    products: [
+        .library(
+            name: "SWS",
+            targets: ["SWS"]
+        )
+    ],
     dependencies: [],
     targets: [
         .target(
@@ -17,6 +23,11 @@ let package = Package(
             dependencies: ["SWS"],
             path: "Sources/Screenwriter",
             resources: [.process("Resources")]
+        ),
+        .executableTarget(
+            name: "sws-tool",
+            dependencies: ["SWS"],
+            path: "Tools/sws-tool"
         )
     ]
 )
