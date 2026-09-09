@@ -21,6 +21,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         NSApp.setActivationPolicy(.regular)
     }
+
+    /// 处理双击 .swsproj/.sws 文件打开（app 未运行时，此回调在 didFinishLaunching 之前触发）
+    func application(_ application: NSApplication, open urls: [URL]) {
+        for url in urls {
+            if url.scheme?.lowercased() == "screenwriter" {
+                handleScreenwriterURL(url)
+            } else {
+                scriptwritingPlugin.openDocument(url: url)
+            }
+        }
+    }
+
+    /// 处理 URL scheme 唤起（screenwriter://open?path=...）
+    func application(_ application: NSApplication, open url: URL) {
+        guard url.scheme?.lowercased() == "screenwriter" else { return }
+        handleScreenwriterURL(url)
+    }
+
+    private func handleScreenwriterURL(_ url: URL) {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let path = components.queryItems?.first(where: { $0.name == "path" })?.value else {
+            print("[AppDelegate] screenwriter:// 缺少 path 参数")
+            return
+        }
+        let fileURL = URL(fileURLWithPath: path)
+        scriptwritingPlugin.openDocument(url: fileURL)
+    }
 }
 
 extension AppDelegate: NSWindowDelegate {

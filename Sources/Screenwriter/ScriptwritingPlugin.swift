@@ -15,6 +15,9 @@ struct FileBuffer {
 class ScriptwritingPlugin: NSObject, WKNavigationDelegate {
     /// 页面是否加载完成（避免竞态：loadHTMLString 是异步的）
     private var isPageLoaded = false
+
+    /// 双击文件启动时待打开的文件（HTML 加载完成前缓存，加载后优先处理）
+    private var pendingOpenURL: URL?
     /// 当前加载的 .sws 文件路径
     private var currentFileURL: URL?
     /// 多文件内存缓冲（key: URL）
@@ -188,8 +191,46 @@ class ScriptwritingPlugin: NSObject, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         isPageLoaded = true
-        // 页面加载完毕后恢复上次 session（如果有）
-        restoreLastSession(webView: webView)
+        // 若用户双击文件启动（pendingOpenURL），优先打开它；否则恢复上次 session
+        if let pending = pendingOpenURL {
+            pendingOpenURL = nil
+            openDocumentResolved(url: pending)
+        } else {
+            restoreLastSession(webView: webView)
+        }
+    }
+
+    /// 打开外部文档（.swsproj 项目 / .sws 剧本）。双击文件或 URL scheme 唤起入口。
+    /// HTML 未加载完成时缓存，等 didFinish 后处理，避免 bridge 消息丢失。
+    func openDocument(url: URL) {
+        let standardized = url.standardizedFileURL
+        guard FileManager.default.fileExists(atPath: standardized.path) else {
+            print("[Scriptwriting] openDocument: 文件不存在 \(standardized.path)")
+            return
+        }
+        if isPageLoaded {
+            openDocumentResolved(url: standardized)
+        } else {
+            pendingOpenURL = standardized
+        }
+    }
+
+    /// HTML 已就绪时的实际打开逻辑（按扩展名分发）
+    private func openDocumentResolved(url: URL) {
+        switch url.pathExtension.lowercased() {
+        case "swsproj":
+            do {
+                try projectManager.loadProject(from: url)
+                pushProjectToWebView()
+                print("[Scriptwriting] 📂 打开项目: \(url.lastPathComponent)")
+            } catch {
+                showAlert("无法打开项目：\(error.localizedDescription)")
+            }
+        case "sws":
+            loadSWSFile(url: url)
+        default:
+            print("[Scriptwriting] openDocument: 不支持的文件类型 .\(url.pathExtension)")
+        }
     }
 
     /// 恢复上次打开的 .sws 文件（如果有且文件仍存在）

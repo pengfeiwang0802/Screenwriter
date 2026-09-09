@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>zh_CN</string>
+	<key>CFBundleExecutable</key>
+	<string>Screenwriter</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.pengfei.screenwriter</string>
+	<key>CFBundleIconFile</key>
+	<string>AppIcon</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Screenwriter</string>
+	<key>CFBundleDisplayName</key>
+	<string>编剧助手</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1.0</string>
+	<key>CFBundleVersion</key>
+	<string>0.1.0</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>14.0</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+
+	<!-- 声明可打开的文件类型：.swsproj 项目 + .sws 剧本 -->
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>编剧项目</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.pengfei.screenwriter.swsproj</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>swsproj</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>AppIcon</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>编剧剧本</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.pengfei.screenwriter.sws</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sws</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>AppIcon</string>
+		</dict>
+	</array>
+
+	<!-- 把自定义扩展名映射到 UTI（否则双击不会路由到本 app） -->
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.pengfei.screenwriter.swsproj</string>
+			<key>UTTypeDescription</key>
+			<string>编剧项目</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>swsproj</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.pengfei.screenwriter.sws</string>
+			<key>UTTypeDescription</key>
+			<string>编剧剧本</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sws</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+
+	<!-- URL scheme：被王二助手等唤起（screenwriter://open?path=...） -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.pengfei.screenwriter</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>screenwriter</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
