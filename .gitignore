@@ -1,0 +1,19 @@
+# Build
+.build/
+DerivedData/
+
+# macOS
+.DS_Store
+*.swp
+*.swo
+
+# IDE
+*.xcworkspace
+xcuserdata/
+
+# Sensitive
+*api_key*
+*token*
+*.env
+
+# Local runtime data
